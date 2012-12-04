@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Project TWLY</title>
+    <title>Liquid error: invalid byte sequence in UTF-8</title>
     <link rel="stylesheet" href="/stylesheets/screen.css" type="text/css" charset="utf-8" />
     <link rel="stylesheet" href="/stylesheets/stylesheet.css" type="text/css" charset="utf-8" />
     <link rel="stylesheet" href="/stylesheets/gollum.css" type="text/css" charset="utf-8" />
@@ -40,206 +40,18 @@
             <div class="main">
               <div class="actions">
                 <div>
-                  <a href="/Home.html">Home</a>
+                  <a href="//Home.html">Home</a>
                 </div>
               </div>
-              <h1>Project TWLY</h1>
-              <div class="content wikistyle gollum markdown">
-                <h2>立法院公報 parser<a class="anchor" id="ç«æ³é¢å¬å ±-parser" href="#ç«æ³é¢å¬å ±-parser"></a></h2>
-
-<p>包含院會紀錄、委員會紀錄、質詢事項等等.</p>
-
-<p>原始格式是 .doc 檔, 目前由 @clkao 把 .doc 用 unoconv 轉成 html, 再處理成純文字檔的 raw data.
-之後再對 txt 做 Structure Parse 轉成 markdown, 其中已經能得知的資訊則以 json 註解起來, 最後再針對 markdown做 Semantic
-分析產生成 json。</p>
-
-<p>提供 API, 院會紀錄/委員會紀錄特定 section 的永久連結</p>
-
-<ul><li>urn 制定中：<a href="http://opendatatw.wikidot.com/gazette">http://opendatatw.wikidot.com/gazette</a> (by @jftsai)
-
-<ul><li>please help defining: 臨時提案、委員會紀錄、議事錄</li>
-</ul></li>
-</ul><p><a href="https://github.com/g0v/ly-gazette/blob/master/raw/index.md">公報列表</a></p>
-
-<p>成員</p>
-
-<ul><li>clkao</li>
-<li>kcwu</li>
-<li>hychen</li>
-<li>(please add yourself)</li>
-</ul><p>聯絡方式:</p>
-
-<ul><li>IRC #g0v.tw on freenode.net</li>
-<li>irc meeting 固定時間：每週一 20:00pm-20:30pm (暫定)</li>
-</ul><p>VCS: </p>
-
-<ul><li><a href="https://github.com/g0v/twlyparser">Parser Source</a></li>
-<li><a href="https://github.com/g0v/ly-gazette">Rawdata</a></li>
-</ul><p>note:
-筆記一下:立法院議事系統  ( from 立法院智庫 )</p>
-
-<h3>Regular Expression Rules 定義<a class="anchor" id="Regular-Expression-Rules-å®ç¾©" href="#Regular-Expression-Rules-å®ç¾©"></a></h3>
-
-<p>the idea is to define a yaml file, so we can share the regex rules for
-each different steps. currently, we will have at least 5 steps as below</p>
-
-<ul><li>doc (source)</li>
-<li>html (doc -&gt; html)</li>
-<li>text (filter useless html code)</li>
-<li>markdown (structured data)</li>
-<li>json </li>
-</ul><h4>todo<a class="anchor" id="todo" href="#todo"></a></h4>
-
-<p>to use named capture variable in regex string.</p>
-
-<ul><li>for javascript, need to use <a href="http://xregexp.com/">http://xregexp.com/</a>.</li>
-</ul><h4>example<a class="anchor" id="example" href="#example"></a></h4>
-
-<div class="highlight"><pre><span class="c"># * 結構說明</span>
-<span class="c"># </span>
-<span class="c"># 群組</span>
-<span class="c">#    規則名稱</span>
-<span class="c">#       Regex 字串</span>
-<span class="o">---</span>
-<span class="n">common</span><span class="p">:</span>
-  <span class="n">conversationline</span><span class="p">:</span> <span class="c"># 主席: 發言內容</span>
-    <span class="n">regex</span><span class="p">:</span> <span class="o">|</span>
-      ^<span class="p">(</span>?<span class="o">&lt;</span><span class="n">speaker</span><span class="o">&gt;</span><span class="p">[</span>^：<span class="p">]{</span>2<span class="p">,</span>10<span class="p">})</span>：<span class="p">(</span>?<span class="o">&lt;</span><span class="n">content</span><span class="o">&gt;.*</span><span class="p">)</span>
-<span class="n">header</span><span class="p">:</span>
-  <span class="nb">title</span><span class="p">:</span> <span class="c"># 公報標題</span>
-    <span class="n">regex</span><span class="p">:</span> <span class="o">|</span> 
-      立法院第<span class="p">(</span>?<span class="o">&lt;</span><span class="n">ad</span><span class="o">&gt;\</span><span class="n">S</span><span class="o">+</span><span class="p">)</span>屆第<span class="p">(</span>?<span class="o">&lt;</span><span class="n">session</span><span class="o">&gt;\</span><span class="n">S</span><span class="o">+</span><span class="p">)</span>會期第<span class="p">(</span>?<span class="o">&lt;</span><span class="n">sitting</span><span class="o">&gt;\</span><span class="n">S</span><span class="o">+</span>?<span class="p">)</span>次<span class="p">(</span>?<span class="o">&lt;</span><span class="n">extra</span><span class="o">&gt;</span>?<span class="p">:</span>臨時會第<span class="p">(</span><span class="o">\</span><span class="n">S</span><span class="o">+</span><span class="p">)</span>次<span class="p">)</span>?會議紀錄
-</pre></div>
-
-<h2>委員基本資料<a class="anchor" id="å§å¡åºæ¬è³æ" href="#å§å¡åºæ¬è³æ"></a></h2>
-
-<p>VCS: <a href="https://github.com/ronnywang/TWLegisllativeYuanData">Parser and Json</a></p>
-
-<h3>Avatar API<a class="anchor" id="Avatar-API" href="#Avatar-API"></a></h3>
-
-<p>提供 script include api 把 <span class="mly">名字</span>代換成有頭像、政黨 (可由 class 設定), 並且加上 infobox Kirsten Li(報名幫忙放這裡ok嗎?)</p>
-
-<p>Usage:</p>
-
-<div class="highlight"><pre><span class="s">'http://avatars.io/50a65bb26e293122b0000073/'</span> <span class="o">+</span> <span class="n">hash</span> <span class="o">+</span> "?<span class="nb">size</span><span class="p">=</span>#<span class="n">type</span>"
-<span class="n">where</span> <span class="n">hash</span> <span class="p">=</span> <span class="n">crypto</span><span class="p">.</span><span class="n">createHash</span><span class="p">(</span><span class="s">'md5'</span><span class="p">).</span><span class="n">update</span><span class="p">(</span>"<span class="n">MLY</span><span class="o">/</span>#<span class="n">name</span>"<span class="p">).</span><span class="n">digest</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span>
-</pre></div>
-
-<p>available type:</p>
-
-<ul><li>small</li>
-<li>medium</li>
-<li>large</li>
-</ul><p>Example: </p>
-
-<div class="highlight"><pre><span class="n">md5</span><span class="p">(</span>"<span class="n">MLY</span><span class="o">/</span>吳育昇"<span class="p">)</span> <span class="p">=</span> <span class="n">be4f880741f86268f97812c3faec9571</span>
-
-<span class="n">img</span> <span class="n">is</span><span class="p">:</span>
-<span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">avatars</span><span class="p">.</span><span class="n">io</span><span class="o">/</span>50<span class="n">a65bb26e293122b0000073</span><span class="o">/</span><span class="n">be4f880741f86268f97812c3faec9571</span>?<span class="nb">size</span><span class="p">=</span><span class="n">small</span>
-</pre></div>
-
-<h2>公報閱讀器<a class="anchor" id="å¬å ±é±è®å¨" href="#å¬å ±é±è®å¨"></a></h2>
-
-<p>用網頁閱讀公報</p>
-
-<p>成員: </p>
-
-<ul><li>clako</li>
-<li>hlb</li>
-</ul><p>聯絡方式:</p>
-
-<ul><li>IRC #g0v.tw on freenode.net</li>
-</ul><p>網站: <a href="http://ly.g0v.tw.jit.su/">http://ly.g0v.tw.jit.su/</a> 
-VCS: <a href="http://github.com/g0v/ly.g0v.tw">網站源碼</a></p>
-
-<h2>委員投票紀錄<a class="anchor" id="å§å¡æç¥¨ç´é" href="#å§å¡æç¥¨ç´é"></a></h2>
-
-<ul><li>這邊有點複雜... 因為投票可分記名/不記名, 所以只能針對記名部份先做。</li>
-<li>議事錄內的投票紀錄是附件, 要怎樣去跟原議題做連結，可能要思考一下。</li>
-<li>議事錄記名投票解析 <a href="https://github.com/nansenat16/tw-legis-log-parser">https://github.com/nansenat16/tw-legis-log-parser</a>
-example: p.84 <a href="http://lci.ly.gov.tw/LyLCEW/agendarec1/02/pdf/08/02/09/LCEWC03_080209.pdf">http://lci.ly.gov.tw/LyLCEW/agendarec1/02/pdf/08/02/09/LCEWC03_080209.pdf</a>
-註：此範例僅是「增列討論事項是否列入院會」的投票，並非針對某議案</li>
-<li>投票可分：公告事項有異議投票、黨團提案列入議程投票、討論事項內容、法案逐條表決... 請熟悉議事規則的朋友補充</li>
-<li>是指這個嗎 - 立法程序 <a href="http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900">http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900</a></li>
-</ul><h2>審議條文對照表修法 diff viewer<a class="anchor" id="å¯©è­°æ¢æå°ç§è¡¨ä¿®æ³-diff-viewer" href="#å¯©è­°æ¢æå°ç§è¡¨ä¿®æ³-diff-viewer"></a></h2>
-
-<p>本國範例: 難以閱讀</p>
-
-<ul><li>現行法條文 vs 行政院提案條文</li>
-<li>現行法條文 vs each 委員、黨團提案條文 ( click to view)
-
-<ul><li>連動「行政院提案說明」與「委員、黨團提案說明」</li>
-</ul></li>
-<li>basically: parse the table into 現行、各版本(條文+說明), then UI for viewing</li>
-<li>他國範例：突尼西亞 OpenGovTN
-
-<ul><li>this seems just a normal diff tool, we probably want something
-web-based with both line/char highlight support and some basic UI
-for choose which version to diff</li>
-</ul></li>
-</ul><h2>各提案的追蹤<a class="anchor" id="åææ¡çè¿½è¹¤" href="#åææ¡çè¿½è¹¤"></a></h2>
-
-<p>成員</p>
-
-<ul><li>nameofevil </li>
-</ul><p>notes:</p>
-
-<ul><li>希望能將提案從提案到目前狀況(待省議、通過、否決)做整理。並能加上搜尋功能，讓一般大眾能夠比較注意到，尤其是跟自身相關的議題。</li>
-<li>dashboard - 如 KanBan 般的法案一覽表，每個法案目前現況，距離上次更新時間</li>
-<li>目前官方的系統: 立法院法律提案審議進度系統
-
-<ul><li>可配合 "立法程序" 一起看
-<a href="http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900">http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900</a></li>
-</ul></li>
-</ul><h2>立法院公報的推荐系統<a class="anchor" id="ç«æ³é¢å¬å ±çæ¨èç³»çµ±" href="#ç«æ³é¢å¬å ±çæ¨èç³»çµ±"></a></h2>
-
-<p>收集公民的瀏覽紀錄，甚至是評分(針對公報，以及與會立委)
-依據收集的資料來建立推荐系統(user: 公民 item: 立委或是會議的tag)，將公報推荐給可能感興趣的公民可以統計收集的資料來建立類似民調的分析結果</p>
-
-<p>member:</p>
-
-<ul><li>wush</li>
-</ul><p>notes:</p>
-
-<ul><li>@pofeng 先有跨年份的全文搜索，然後加 annotation 可以達到類似的功能，類似(已經關閉的) Google Sidewiki</li>
-<li>既有的open source 推荐系統：
-
-<ul><li>Java </li>
-<li>LensKit(<a href="http://lenskit.grouplens.org/">http://lenskit.grouplens.org/</a>) </li>
-<li>easyrec(<a href="http://easyrec.org">http://easyrec.org</a>)</li>
-<li>Python</li>
-<li>Crab(<a href="https://github.com/muricoca/crab">https://github.com/muricoca/crab</a>)</li>
-<li>PHP</li>
-<li>Vogoo(<a href="http://sourceforge.net/projects/vogoo">http://sourceforge.net/projects/vogoo</a>) 這我已經有成功架起來，可和PostgreSQL整合，用起來不困難。同時提供User based、Item based的推荐功能。但是最後一次更新是3年前。需自行擴充或除錯。</li>
-<li>R
-recommenderlab(<a href="http://r-forge.r-project.org/projects/recommenderlab/">http://r-forge.r-project.org/projects/recommenderlab/</a>) 這是一個供測試和開發演算法用的framework</li>
-</ul></li>
-</ul><h2>pressure your 立法委員<a class="anchor" id="pressure-your-ç«æ³å§å¡" href="#pressure-your-ç«æ³å§å¡"></a></h2>
-
-<ul><li>provide site / API to request statement for issues from your MLY
-probably starting from a congress api? <a href="http://services.sunlightlabs.com/docs/Sunlight_Congress_API/">http://services.sunlightlabs.com/docs/Sunlight_Congress_API/</a></li>
-<li>問：能跟公民監督國會聯盟的歷屆立委評比資料串起來嗎？</li>
-</ul><h2>議事影音整理<a class="anchor" id="è­°äºå½±é³æ´ç" href="#è­°äºå½±é³æ´ç"></a></h2>
-
-<ul><li>Needs Tech: ivod 上有議員問政影音，但是在Windows上才能看(需要MediaPlayer plugin)。想要把影片都抓下來放到youtube上，有人嘗試過嗎? @jftsai</li>
-<li>@pofeng: 好像可用 NetTransport 下載 <a href="http://www.xi-soft.com/default.htm">http://www.xi-soft.com/default.htm</a></li>
-<li>pofeng: 多謝，之前在opendata.tw google group也有人建議用這個軟體，不過使用上會遇到重複抓取的問題，不知可有建議？</li>
-<li>Kirsten Liu:我嘗試過最笨的手動用ie開, 載(這部分我還沒有試這個能不能拉下來,有的可以), 手動上傳, 如果載的部分能解決的話要自動化應該能做到
-NeedsWriter: @ipa ,  @pofeng , @rcchiu
-goo.gl/cBBLL</li>
-<li>NeedsDesigner: @hlb</li>
-<li>NeedsTalkingToRealPerson: 如何要求立法院釋出公報初稿？</li>
-<li>"公報初稿(目前僅開放立法院內檢索利用)" <a href="http://www1.stat.gov.tw/fp.asp?xItem=8575&amp;ctNode=1640">http://www1.stat.gov.tw/fp.asp?xItem=8575&amp;ctNode=1640</a>
-"委員口頭質詢或發言之速記錄，經刊印公報初稿後分送發言人，發言人如有文字修正，應於三日內通知更正，屆期未通知者即照初稿編印立法院公報，按期發行" <a href="http://laws.mywoo.com/1/4/320.html">http://laws.mywoo.com/1/4/320.html</a></li>
-<li>11/23 在「政府資料開放加值應用研究諮詢座談會」遇到陳學聖立委助理（看報名名單似乎是唯一有來參加的立委辦公室）蔡先生。他說後來未開放的原因實際是「擔心反對黨立委拿未訂正的初稿來開記者會，但其實(院內)大家都是拿得到的」clkao: 「如果即時公布，不是更有助於澄清錯誤，並且提供上下文避免斷章取義？」他說會和公報處聯絡看如何進行</li>
-<li>老牌的 <a href="http://www.opencongress.org">http://www.opencongress.org</a> 有釋出源碼（<a href="https://github.com/opencongress/opencongress%EF%BC%89%EF%BC%8C%E5%8C%85%E6%8B%AC%E6%B3%95%E6%A1%88%E8%BF%BD%E8%B9%A4%E3%80%81%E6%8A%95%E7%A5%A8%E8%A8%98%E9%8C%84%E3%80%81%E5%80%8B%E8%B3%87...%E7%AD%89%EF%BC%8C%E7%9C%8B%E8%83%BD%E5%90%A6%E5%90%83%E4%B8%8A%E8%BF%B0%E7%9A%84%E8%B3%87%E6%96%99%E7%94%A2%E5%87%BA%E5%8F%B0%E7%81%A3%E7%89%88%EF%BC%9F">https://github.com/opencongress/opencongress），包括法案追蹤、投票記錄、個資...等，看能否吃上述的資料產出台灣版？</a></li>
-</ul>
+              <h1>Liquid error: invalid byte sequence in UTF-8</h1>
+              <div class="content wikistyle gollum Liquid error: invalid byte sequence in UTF-8">
+                Liquid error: invalid byte sequence in UTF-8
               </div>
             </div>
           </div>
           <div class="admin">
             <div style="float: left;">
-              <small>Last edited by <b>hychen</b>, 2012-12-04 22:29:55</small>
+              <small>Last edited by <b>Liquid error: invalid byte sequence in UTF-8</b>, Liquid error: invalid byte sequence in UTF-8</small>
             </div>
           </div>
         </div>
