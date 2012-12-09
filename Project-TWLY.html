@@ -74,10 +74,12 @@
 
 <ul><li><a href="https://github.com/g0v/twlyparser">Parser Source</a></li>
 <li><a href="https://github.com/g0v/ly-gazette">Rawdata</a></li>
-</ul><p>note:
-筆記一下:立法院議事系統  ( from 立法院智庫 )</p>
+</ul><p>官方正式網站:</p>
 
-<h3>Regular Expression Rules 定義<a class="anchor" id="Regular-Expression-Rules-å®ç¾©" href="#Regular-Expression-Rules-å®ç¾©"></a></h3>
+<ul><li><a href="http://npl.ly.gov.tw/do/www/dbMaintainNew?dbKind=%E7%AB%8B%E6%B3%95%E9%99%A2%E6%99%BA%E5%BA%AB">立法院智庫</a></li>
+<li><a href="http://lis.ly.gov.tw/lgcgi/ttswebpw?in_out/meetin">立法院議事系統</a></li>
+<li><a href="http://lis.ly.gov.tw/lgcgi/ttswebpw?in_out/qrin">立法院質詢系統</a> ( pofeng 註: 找過 "禮貌" keyword 沒辦法找到 clkao 找出的資料 )</li>
+</ul><h3>Regular Expression Rules 定義<a class="anchor" id="Regular-Expression-Rules-å®ç¾©" href="#Regular-Expression-Rules-å®ç¾©"></a></h3>
 
 <p>the idea is to define a yaml file, so we can share the regex rules for
 each different steps. currently, we will have at least 5 steps as below</p>
@@ -100,6 +102,13 @@ each different steps. currently, we will have at least 5 steps as below</p>
 <span class="c">#    規則名稱</span>
 <span class="c">#       Regex 字串</span>
 <span class="o">---</span>
+<span class="n">_alias</span><span class="p">:</span>
+  <span class="n">first_last_name</span><span class="p">:</span> <span class="c"># alias name</span>
+    <span class="n">regex</span><span class="p">:</span> <span class="o">|</span>
+      <span class="p">(</span><span class="o">\</span><span class="n">s</span><span class="p">{</span>1<span class="p">,</span>2<span class="p">})</span>委員<span class="p">(</span><span class="o">\</span><span class="n">s</span><span class="p">{</span>1<span class="p">,</span>3<span class="p">})</span>
+    <span class="n">formater</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">last_name</span>
+      <span class="o">-</span> <span class="n">first_name</span>
 <span class="n">common</span><span class="p">:</span>
   <span class="n">conversationline</span><span class="p">:</span> <span class="c"># 主席: 發言內容</span>
     <span class="n">regex</span><span class="p">:</span> <span class="o">|</span>
@@ -108,6 +117,12 @@ each different steps. currently, we will have at least 5 steps as below</p>
   <span class="nb">title</span><span class="p">:</span> <span class="c"># 公報標題</span>
     <span class="n">regex</span><span class="p">:</span> <span class="o">|</span> 
       立法院第<span class="p">(</span>?<span class="o">&lt;</span><span class="n">ad</span><span class="o">&gt;\</span><span class="n">S</span><span class="o">+</span><span class="p">)</span>屆第<span class="p">(</span>?<span class="o">&lt;</span><span class="n">session</span><span class="o">&gt;\</span><span class="n">S</span><span class="o">+</span><span class="p">)</span>會期第<span class="p">(</span>?<span class="o">&lt;</span><span class="n">sitting</span><span class="o">&gt;\</span><span class="n">S</span><span class="o">+</span>?<span class="p">)</span>次<span class="p">(</span>?<span class="o">&lt;</span><span class="n">extra</span><span class="o">&gt;</span>?<span class="p">:</span>臨時會第<span class="p">(</span><span class="o">\</span><span class="n">S</span><span class="o">+</span><span class="p">)</span>次<span class="p">)</span>?會議紀錄
+<span class="n">questioning</span><span class="p">:</span>
+  <span class="n">reply_from_government</span><span class="p">:</span>
+    <span class="n">regex</span><span class="p">:</span> <span class="o">|</span>
+      函送<span class="c">%first_last_name%就(.*)所提質詢之書面答復，請查照案 # 使用alias</span>
+    <span class="n">formater</span><span class="p">:</span>
+      <span class="o">-</span> <span class="nb">title</span>
 </pre></div>
 
 <h2>委員基本資料<a class="anchor" id="å§å¡åºæ¬è³æ" href="#å§å¡åºæ¬è³æ"></a></h2>
@@ -185,11 +200,8 @@ for choose which version to diff</li>
 
 <ul><li>希望能將提案從提案到目前狀況(待省議、通過、否決)做整理。並能加上搜尋功能，讓一般大眾能夠比較注意到，尤其是跟自身相關的議題。</li>
 <li>dashboard - 如 KanBan 般的法案一覽表，每個法案目前現況，距離上次更新時間</li>
-<li>目前官方的系統: 立法院法律提案審議進度系統
-
-<ul><li>可配合 "立法程序" 一起看
-<a href="http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900">http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900</a></li>
-</ul></li>
+<li>目前官方的系統: 立法院法律提案審議進度系統( <a href="http://lis.ly.gov.tw/lgcgi/ttswebpw?in_out/mempropg08in">http://lis.ly.gov.tw/lgcgi/ttswebpw?in_out/mempropg08in</a> )</li>
+<li>可配合 "立法程序" 一起看 ( <a href="http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900">http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900</a> )</li>
 </ul><h2>立法院公報的推荐系統<a class="anchor" id="ç«æ³é¢å¬å ±çæ¨èç³»çµ±" href="#ç«æ³é¢å¬å ±çæ¨èç³»çµ±"></a></h2>
 
 <p>收集公民的瀏覽紀錄，甚至是評分(針對公報，以及與會立委)
@@ -238,7 +250,7 @@ goo.gl/cBBLL</li>
           </div>
           <div class="admin">
             <div style="float: left;">
-              <small>Last edited by <b>ETBlue</b>, 2012-12-05 02:38:50</small>
+              <small>Last edited by <b>clkao</b>, 2012-12-09 22:42:37</small>
             </div>
           </div>
         </div>
