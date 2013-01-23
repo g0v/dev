@@ -26,6 +26,233 @@
                                 <div class="main">
                                     <div class="content wikistyle gollum markdown">
 
+<h2>立法院公報 parser</h2>
+<p>包含院會紀錄、委員會紀錄、質詢事項等等.
+
+</p>
+<p>原始格式是 .doc 檔, 目前由 @clkao 把 .doc 用 unoconv 轉成 html, 再處理成純文字檔的 raw data.
+之後再對 txt 做 Structure Parse 轉成 markdown, 其中已經能得知的資訊則以 json 註解起來, 最後再針對 markdown做 Semantic
+分析產生成 json。
+
+</p>
+<p>提供 API, 院會紀錄/委員會紀錄特定 section 的永久連結
+- urn 制定中：http://opendatatw.wikidot.com/gazette (by @jftsai)
+  - please help defining: 臨時提案、委員會紀錄、議事錄
+
+</p>
+<p><a href="https://github.com/g0v/ly-gazette/blob/master/raw/index.md">公報列表</a>
+
+</p>
+<p>成員
+- clkao
+- kcwu
+- hychen
+- (please add yourself)
+
+</p>
+<p>聯絡方式:
+- IRC #g0v.tw on freenode.net
+- irc meeting 固定時間：每週一 20:00pm-20:30pm (暫定)
+
+</p>
+<p>VCS: 
+- <a href="https://github.com/g0v/twlyparser">Parser Source</a>
+- <a href="https://github.com/g0v/ly-gazette">Rawdata</a>
+
+</p>
+<p>官方正式網站:
+- <a href="http://npl.ly.gov.tw/do/www/dbMaintainNew?dbKind=%E7%AB%8B%E6%B3%95%E9%99%A2%E6%99%BA%E5%BA%AB">立法院智庫</a>
+- <a href="http://lis.ly.gov.tw/lgcgi/ttswebpw?in_out/meetin">立法院議事系統</a>
+- <a href="http://lis.ly.gov.tw/lgcgi/ttswebpw?in_out/qrin">立法院質詢系統</a> ( pofeng 註: 找過 &quot;禮貌&quot; keyword 沒辦法找到 clkao 找出的資料 )
+
+</p>
+<h3>Regular Expression Rules 定義</h3>
+<p>the idea is to define a yaml file, so we can share the regex rules for
+each different steps. currently, we will have at least 5 steps as below
+
+</p>
+<ul>
+<li>doc (source)</li>
+<li>html (doc -&gt; html)</li>
+<li>text (filter useless html code)</li>
+<li>markdown (structured data)</li>
+<li>json </li>
+</ul>
+<h4>todo</h4>
+<p>to use named capture variable in regex string.
+- for javascript, need to use http://xregexp.com/.
+
+</p>
+<h4>example</h4>
+<p>```
+</p>
+<h1>* 結構說明</h1>
+<h1> </h1>
+<h1>群組</h1>
+<h1>規則名稱</h1>
+<h1>Regex 字串</h1>
+<hr>
+<p>_alias:
+  first_last_name: # alias name
+    regex: |
+      (\s{1,2})委員(\s{1,3})
+    formater:
+      - last_name
+      - first_name
+common:
+  conversationline: # 主席: 發言內容
+    regex: |
+      ^(?<speaker>[^：]{2,10})：(?<content>.<em>)
+header:
+  title: # 公報標題
+    regex: | 
+      立法院第(?<ad>\S+)屆第(?<session>\S+)會期第(?<sitting>\S+?)次(?<extra>?:臨時會第(\S+)次)?會議紀錄
+questioning:
+  reply_from_government:
+    regex: |
+      函送%first_last_name%就(.</em>)所提質詢之書面答復，請查照案 # 使用alias
+    formater:
+      - title
+```
+
+</p>
+<h2>委員基本資料</h2>
+<p>VCS: <a href="https://github.com/ronnywang/TWLegisllativeYuanData">Parser and Json</a>
+
+</p>
+<h3>Avatar API</h3>
+<p>提供 script include api 把 <span class="mly">名字</span>代換成有頭像、政黨 (可由 class 設定), 並且加上 infobox Kirsten Li(報名幫忙放這裡ok嗎?)
+
+</p>
+<p>Usage:
+
+</p>
+<p><code>
+&#39;http://avatars.io/50a65bb26e293122b0000073/&#39; + hash + &quot;?size=#type&quot;
+where hash = crypto.createHash(&#39;md5&#39;).update(&quot;MLY/#name&quot;).digest(&#39;hex&#39;)
+</code>
+
+</p>
+<p>available type:
+- small
+- medium
+- large
+
+</p>
+<p>Example: 
+
+</p>
+<p>```
+md5(&quot;MLY/吳育昇&quot;) = be4f880741f86268f97812c3faec9571
+
+</p>
+<p>img is:
+http://avatars.io/50a65bb26e293122b0000073/be4f880741f86268f97812c3faec9571?size=small
+```
+
+</p>
+<h2>公報閱讀器</h2>
+<p>用網頁閱讀公報
+
+</p>
+<p>成員: 
+- clako
+- hlb
+
+</p>
+<p>聯絡方式:
+- IRC #g0v.tw on freenode.net
+
+</p>
+<ul>
+<li>網站: http://ly.g0v.tw.jit.su/#/sitting </li>
+<li>設計雛型：http://twlyreader-prototype.herokuapp.com/reader.html?json_url=/json/3948_interp.json</li>
+<li>VCS: <a href="http://github.com/g0v/ly.g0v.tw">網站源碼</a></li>
+<li>搜尋功能：http://open.ly.g0v.tw/</li>
+</ul>
+<h2>委員投票紀錄</h2>
+<ul>
+<li>這邊有點複雜... 因為投票可分記名/不記名, 所以只能針對記名部份先做。</li>
+<li>議事錄內的投票紀錄是附件, 要怎樣去跟原議題做連結，可能要思考一下。</li>
+<li>議事錄記名投票解析 https://github.com/nansenat16/tw-legis-log-parser
+example: p.84 http://lci.ly.gov.tw/LyLCEW/agendarec1/02/pdf/08/02/09/LCEWC03_080209.pdf
+註：此範例僅是「增列討論事項是否列入院會」的投票，並非針對某議案</li>
+<li>投票可分：公告事項有異議投票、黨團提案列入議程投票、討論事項內容、法案逐條表決... 請熟悉議事規則的朋友補充</li>
+<li>是指這個嗎 - 立法程序 http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900</li>
+<li>demo：http://g0v.github.com/ly-vote/</li>
+</ul>
+<h2>審議條文對照表修法 diff viewer</h2>
+<p>本國範例: 難以閱讀
+- 現行法條文 vs 行政院提案條文
+- 現行法條文 vs each 委員、黨團提案條文 ( click to view)
+  - 連動「行政院提案說明」與「委員、黨團提案說明」
+- basically: parse the table into 現行、各版本(條文+說明), then UI for viewing
+- 他國範例：突尼西亞 OpenGovTN
+  - this seems just a normal diff tool, we probably want something
+    web-based with both line/char highlight support and some basic UI
+    for choose which version to diff
+
+</p>
+<p>目前demo：http://ly.g0v.tw.jit.su/#/bill/1011130070300200
+
+</p>
+<h2>各提案的追蹤</h2>
+<p>成員
+- nameofevil 
+
+</p>
+<p>notes:
+- 希望能將提案從提案到目前狀況(待省議、通過、否決)做整理。並能加上搜尋功能，讓一般大眾能夠比較注意到，尤其是跟自身相關的議題。
+- dashboard - 如 KanBan 般的法案一覽表，每個法案目前現況，距離上次更新時間
+- 目前官方的系統: 立法院法律提案審議進度系統( http://lis.ly.gov.tw/lgcgi/ttswebpw?in_out/mempropg08in )
+- 可配合 &quot;立法程序&quot; 一起看 ( http://www.ly.gov.tw/02_introduce/0201_intro/introView.action?id=9&amp;itemno=02010900 )
+
+</p>
+<h2>立法院公報的推荐系統</h2>
+<p>收集公民的瀏覽紀錄，甚至是評分(針對公報，以及與會立委)
+依據收集的資料來建立推荐系統(user: 公民 item: 立委或是會議的tag)，將公報推荐給可能感興趣的公民可以統計收集的資料來建立類似民調的分析結果
+
+</p>
+<p>member:
+- wush
+
+</p>
+<p>notes:
+- @pofeng 先有跨年份的全文搜索，然後加 annotation 可以達到類似的功能，類似(已經關閉的) Google Sidewiki
+- 既有的open source 推荐系統：
+  - Java 
+    - LensKit(http://lenskit.grouplens.org/) 
+    - easyrec(http://easyrec.org)
+  - Python
+    - Crab(https://github.com/muricoca/crab)
+  - PHP
+    - Vogoo(http://sourceforge.net/projects/vogoo) 這我已經有成功架起來，可和PostgreSQL整合，用起來不困難。同時提供User based、Item based的推荐功能。但是最後一次更新是3年前。需自行擴充或除錯。
+  - R
+    recommenderlab(http://r-forge.r-project.org/projects/recommenderlab/) 這是一個供測試和開發演算法用的framework
+
+</p>
+<h2>pressure your 立法委員</h2>
+<ul>
+<li>provide site / API to request statement for issues from your MLY
+probably starting from a congress api? http://services.sunlightlabs.com/docs/Sunlight_Congress_API/</li>
+<li>問：能跟公民監督國會聯盟的歷屆立委評比資料串起來嗎？</li>
+</ul>
+<h2>議事影音整理</h2>
+<ul>
+<li>Needs Tech: ivod 上有議員問政影音，但是在Windows上才能看(需要MediaPlayer plugin)。想要把影片都抓下來放到youtube上，有人嘗試過嗎? @jftsai</li>
+<li>@pofeng: 好像可用 NetTransport 下載 http://www.xi-soft.com/default.htm</li>
+<li>pofeng: 多謝，之前在opendata.tw google group也有人建議用這個軟體，不過使用上會遇到重複抓取的問題，不知可有建議？</li>
+<li>Mac 的朋友，可以試試看 Flip4Mac 這個 plugin。(感謝 Jyun-Fan Tsai 提供此資訊)</li>
+<li>Kirsten Liu:我嘗試過最笨的手動用ie開, 載(這部分我還沒有試這個能不能拉下來,有的可以), 手動上傳, 如果載的部分能解決的話要自動化應該能做到
+NeedsWriter: @ipa ,  @pofeng , @rcchiu
+goo.gl/cBBLL</li>
+<li>NeedsDesigner: @hlb</li>
+<li>NeedsTalkingToRealPerson: 如何要求立法院釋出公報初稿？</li>
+<li>&quot;公報初稿(目前僅開放立法院內檢索利用)&quot; http://www1.stat.gov.tw/fp.asp?xItem=8575&amp;ctNode=1640
+&quot;委員口頭質詢或發言之速記錄，經刊印公報初稿後分送發言人，發言人如有文字修正，應於三日內通知更正，屆期未通知者即照初稿編印立法院公報，按期發行&quot; http://laws.mywoo.com/1/4/320.html</li>
+<li>11/23 在「政府資料開放加值應用研究諮詢座談會」遇到陳學聖立委助理（看報名名單似乎是唯一有來參加的立委辦公室）蔡先生。他說後來未開放的原因實際是「擔心反對黨立委拿未訂正的初稿來開記者會，但其實(院內)大家都是拿得到的」clkao: 「如果即時公布，不是更有助於澄清錯誤，並且提供上下文避免斷章取義？」他說會和公報處聯絡看如何進行</li>
+<li>老牌的 http://www.opencongress.org 有釋出源碼（https://github.com/opencongress/opencongress），包括法案追蹤、投票記錄、個資...等，看能否吃上述的資料產出台灣版？</li>
+</ul>
 </div>
 </div>
 </div>
