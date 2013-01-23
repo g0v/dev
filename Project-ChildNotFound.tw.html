@@ -26,6 +26,80 @@
                                 <div class="main">
                                     <div class="content wikistyle gollum markdown">
 
+<p>失蹤兒少開放資料平台計畫
+
+</p>
+<p>失蹤兒的資訊需要快速有效的散播，掌握協尋的黃金時段。工程師和設計師們與內政部兒童局/兒童福利聯盟文教基金會共同成立的 <a href="http://www.missingkids.org.tw/">失蹤兒童少年資料管理中心</a> 攜手合作，參考 <a href="http://notfound.org/">404 missing children</a> 網站，打造台灣版的失蹤兒少開放資料服務。
+
+</p>
+<h1>What we are going to do</h1>
+<ul>
+<li>從失蹤兒童少年資料管理中心 http://www.missingkids.org.tw/ 網頁 parse 進資料庫 (各縣市似乎也有分散的網站，也都蒐集進來) 2013/1/22 更新：為了確保取得合法的個資授權以及維持資料的即時性和正確性，僅採用資料管理中心整理好的公開協尋資料。本組與資料管理中心密切合作中，未來將直從後端銜接，不再需要 parse，目前正在討論後端資料銜接的方式。</li>
+<li>參考國外的活動 404 missing children http://notfound.org/ http://www.childnotfound.com/ 提供台灣版本，讓有心協助的網站主只要嵌入簡單的 script 就能在網站 404 頁面顯示失蹤兒童訊息。2013/1/22 更新：由於 404 頁面曝光率較低，除了 404 頁面之外，還要提供可以嵌入部落格側邊欄的程式碼，以增加曝光管道。</li>
+<li>也許提供 API 提供資料 (待討論) 2013/1/22 更新：為了遵守資料中心和家長間的個資授權條款，資料管理中心必須追蹤個資使用的流向，同時避免個資被不肖人士拿去做營利用途，比方說當作募款題材詐財等。因此所有個資必須從 404 專案的程式碼去提供，無法允許任意人士自由存取原始資料。</li>
+</ul>
+<h1>What we have done</h1>
+<p>Github / Ash
+* https://github.com/childnotfound
+
+</p>
+<p>Demo page （目前僅 404 內嵌頁面，預計加入部落格側邊欄內嵌頁面） / ddio
+* http://childnotfound.tw/404
+
+</p>
+<p>將資料匯入 fusion table, 將資料產生cards與地圖定位 / Tim
+* https://www.google.com/fusiontables/data?docid=1GQZncTnbkzgJ8tM-Nm5fSp6gwEu2qPgDzIdgBl0#card:id=5
+
+</p>
+<p>Wireframe of childnotfound.tw/index.html / ET
+<img src="https://trello-attachments.s3.amazonaws.com/50b967f4ac1f2a021800b3d5/50be3f5b7361f911710088ac/b27f4e9d4e1aa4bc1f1ccae239f7f394/childnotfound.tw.png" alt="Wireframe">
+
+</p>
+<p>Visual Design / Lingxibai
+<img src="https://s3-us-west-2.amazonaws.com/droplr.storage/files/acc_110535/ngVj?AWSAccessKeyId=AKIAJSVQN3Z4K7MT5U2A&amp;Expires=1358838771&amp;Signature=0YGYTGqvL4rTqQyhXkYWJLlnNFQ%3D&amp;response-content-disposition=inline%3B%20filename%2A%3DUTF-8%27%27logo1_on_blue.jpg" alt="Logo">
+<img src="https://s3-us-west-2.amazonaws.com/droplr.storage/files/acc_110535/Tpsq?AWSAccessKeyId=AKIAJSVQN3Z4K7MT5U2A&amp;Expires=1358838693&amp;Signature=Pdl8sgG%2F5TjtMOsc2dYXWQ0ZF60%3D&amp;response-content-disposition=inline%3B%20filename%2A%3DUTF-8%27%27HP.jpg" alt="Home Page">
+<img src="https://s3-us-west-2.amazonaws.com/droplr.storage/files/acc_110535/RRdt?AWSAccessKeyId=AKIAJSVQN3Z4K7MT5U2A&amp;Expires=1358838712&amp;Signature=LWoENj2v%2F2MAb3%2BQ8KuWE23713I%3D&amp;response-content-disposition=inline%3B%20filename%2A%3DUTF-8%27%27demo%2520page.jpg" alt="404 Page">
+
+</p>
+<h1>We are working on</h1>
+<p>Trello board
+* https://trello.com/404missingchildren
+
+</p>
+<h1>About this project</h1>
+<p>Project Name
+* ChildNotFound.tw 失蹤兒少開放資料平台計畫
+
+</p>
+<p>Advisor
+* 中央研究院資訊科學研究所蕭景燈博士
+
+</p>
+<p>Members
+<em> Ash Wu (Team Leader)
+http://twitter.com/hSATAC
+http://facebook.com/hSATAC
+</em> Tim Chen (back end programmer)
+<em> Chrisliuqq (back end programmer)
+</em> ddio (front end programmer)
+<em> Linmic (front end programmer) 
+</em> timdream (front end programmer) https://twitter.com/timdream
+<em> Lingxibai (visual designer)
+lingxibai@gmail.com
+</em> Mindos Cheng (coordinator)
+<em> Ivy Hsu (兒福聯盟許組長)
+</em> Yuting Lin (兒福聯盟社工)
+* ETBlue (project manager)
+http://twitter.com/ETBlue
+
+</p>
+<p>Inspired by
+<em> http://notfound.org/
+</em> http://www.childnotfound.com/
+
+</p>
+<p>Authorized data source
+* http://www.missingkids.org.tw/ （感謝失蹤兒童少年資料管理中心許慶玲組長的大力支持及鼓勵，提供資料使用授權）</p>
 </div>
 </div>
 </div>
