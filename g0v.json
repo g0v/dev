@@ -1,6 +1,7 @@
 {
   "status": "beta",
   "name": "meta",
+  "name_zh": "基礎建設",
   "description": "g0v meta: g0v community coordination",
   "description_zh": "g0v 基礎建設：社群協調、演講資訊、流程規劃",
   "document": "http://hack.g0v.tw/meta",
