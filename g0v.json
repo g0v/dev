@@ -1,4 +1,14 @@
 {
+  "author": "clkao",
+  "contributors": [
+    "hlb",
+    "ipaaa",
+    "audrey",
+    "zbryikt",
+    "kcwu",
+    "dannvix",
+    "wildjcrt"
+  ],
   "status": "beta",
   "name": "meta",
   "name_zh": "基礎建設",
@@ -22,5 +32,10 @@
   ],
   "audience": [
     "contributor"
+  ]
+  "needs": [
+    "designer",
+    "programmer",
+    "writer"
   ]
 }
